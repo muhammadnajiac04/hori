@@ -8,7 +8,7 @@
   :root{
     --card-radius: 18px;
     --img-radius: 80px;        /* big rounded corners for image */
-    --img-margin: 40px;        /* default image margin (all sides) */
+    --img-margin: 60px;        /* default image margin (all sides) */
     --gap: 20px;
   }
 
@@ -73,7 +73,7 @@
     border-bottom-right-radius: var(--img-radius);
   }
   .card:nth-child(even) .card-image img{
-    border-top-right-radius: var(--img-radius);
+    border-top-left-radius: var(--img-radius);
     border-bottom-right-radius: var(--img-radius);
   }
 
@@ -123,56 +123,69 @@
   }
 
   /* Mobile: stack and make everything full width */
-/* Alternate layout for even cards on wide screens */
+  @media (min-width: 769px) {
+  .card:nth-child(even) {
+    flex-direction: row-reverse;
+  }
+}
+
+/* Mobile: stack image on top for ALL cards */
+@media (max-width: 768px) {
+  .card {
+    flex-direction: column !important; /* Force stacking */
+  }
+  .card img {
+  width: 100%;
+  height: 350px; /* same height for all images */
+  object-fit: cover;
+  background-size: cover;
+  background-position: center;
+  border-top-left-radius: 60px;
+  border-bottom-right-radius: 60px;
+  margin: 0; /* removes inconsistent margins */
+}
+
+  }
+}
+   /* Desktop default image height */
+.card-image img {
+  display: block;
+  width: 100%;
+  max-width: 650px;
+  height: clamp(220px, 30vw, 360px); /* responsive height for desktop/tablet */
+  object-fit: cover;
+  margin: 0;
+}
+
+/* Desktop alternate layout */
 @media (min-width: 769px) {
   .card:nth-child(even) {
     flex-direction: row-reverse;
   }
 }
 
-/* Remove different format for even cards */
-.card:nth-child(odd) .card-image img,
-.card:nth-child(even) .card-image img {
-  border-top-left-radius: var(--img-radius);
-  border-bottom-left-radius: var(--img-radius);
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+/* Mobile view: image on top, reduced height */
+@media (max-width: 768px) {
+  .card {
+    flex-direction: column !important;
+  }
+
+  .card-image img {
+    width: 100%;
+    height: 220px; /* reduced height for mobile */
+    object-fit: cover;
+    border-top-left-radius: 60px;
+    border-bottom-right-radius: 60px;
+  }
+
+  /* Override fancy corner radii for uniform look */
+  .card:nth-child(odd) .card-image img,
+  .card:nth-child(even) .card-image img {
+    border-top-left-radius: 60px;
+  border-bottom-right-radius: 60px;
+  }
 }
 
-
-    /* image should become fluid and not be very tall on small screens */
-    .card-image img{
-      width: 100%;
-      height: auto;               /* let natural aspect ratio flow */
-      max-height: 480px;
-      /* smaller radius for mobile for smoother corners */
-      border-radius: 16px;
-    }
-
-    /* override the odd/even special radii (we want uniform rounded corners on mobile) */
-    .card:nth-child(odd)  .card-image img,
-    .card:nth-child(even) .card-image img{
-      border-top-left-radius: 16px;
-      border-top-right-radius: 16px;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-
-    /* adjust spacing & typography for small screens */
-    .package-features{ margin-left: 1.1rem; }
-    .card h2{ font-size: 18px; }
-  }
-
-  /* small tweaks for very narrow phones */
-  @media (max-width: 420px){
-    body{ padding: 12px 10px; }
-    .card-content{ padding: 12px; }
-    .card-image{ padding: 10px; }
-    .card-image img{ border-radius: 12px; }
-  }
-
-  /* utility: let you tweak image margin individually if needed */
-  .card[data-img-margin] .card-image{ padding: attr(data-img-margin px); } /* fallback — browsers don't widely support attr() for padding; use --img-margin inline if needed */
 </style>
 </head>
 <body>
